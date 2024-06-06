@@ -11,10 +11,16 @@ var apiService = builder.AddProject<Projects.AspireSample_ApiService>("apiservic
     .WithReference(state)
     .WithReference(pubsub);
 
+var apiService2 = builder.AddProject<Projects.AspireSample_ApiService>("apiservice2")
+    .WithDaprSidecar()
+    .WithReference(state)
+    .WithReference(pubsub);
+
 builder.AddProject<Projects.AspireSample_Web>("webfrontend")
     .WithDaprSidecar()
     .WithExternalHttpEndpoints()
     .WithReference(state)
-    .WithReference(apiService);
+    .WithReference(apiService)
+    .WithReference(apiService2);
 
 builder.Build().Run();
