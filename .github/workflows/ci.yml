@@ -1,0 +1,32 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build_test:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+
+      - name: Install .NET workloads
+        run: dotnet workload install aspire
+
+      - name: Restore
+        run: dotnet restore
+
+      - name: Build
+        run: dotnet build
+
+      - name: Test
+        run: dotnet test --no-build --verbosity normal
