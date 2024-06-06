@@ -1,4 +1,5 @@
 using AspireSample.ServiceDefaults;
+using Dapr.Client;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,7 +23,7 @@ var summaries = new[]
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
 };
 
-app.MapGet("/weatherforecast", () =>
+app.MapGet("/weatherforecast", async (DaprClient daprClient) =>
 {
     var forecast = Enumerable.Range(1, 5).Select(index =>
         new WeatherForecast
@@ -32,6 +33,9 @@ app.MapGet("/weatherforecast", () =>
             summaries[Random.Shared.Next(summaries.Length)]
         ))
         .ToArray();
+
+    await daprClient.SaveStateAsync("state", Guid.NewGuid().ToString(), forecast);
+
     return forecast;
 });
 
