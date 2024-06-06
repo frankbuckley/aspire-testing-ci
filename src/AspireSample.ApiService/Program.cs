@@ -35,6 +35,12 @@ app.MapGet("/weatherforecast", () =>
     return forecast;
 });
 
+app.MapPost("/pubsub", (HttpContext context) =>
+{
+    return Results.Ok();
+
+}).WithTopic("pubsub", "test");
+
 app.MapDefaultEndpoints();
 
 app.Run();
